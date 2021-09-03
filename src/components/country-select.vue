@@ -109,13 +109,10 @@ export default {
     },
     filteredCountries() {
       const filtered = []
-      const regOption = new RegExp(this.searchFilter, 'ig')
+      const regOption = new RegExp(`^${this.searchFilter}`, 'ig')
       for (const country of this.countries) {
-        if(this.searchFilter.length < 1 || country.countryName.match(regOption)){
-          if(filtered.length < this.dropdownCap){
-            // console.log(country)
-            filtered.push(country)
-          }
+        if(this.searchFilter.length < 1 || country.countryName.match(regOption) || country.countryShortCode.match(regOption)){
+          if(filtered.length < this.dropdownCap) filtered.push(country)
         }
       }
       return filtered

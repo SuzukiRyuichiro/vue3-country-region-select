@@ -41,6 +41,7 @@ export default {
     ran: false,
     searchFilter: '',
     optionsShown: false,
+    selectedCountry: {},
   }),
   computed: {
     countries() {
@@ -139,7 +140,7 @@ export default {
     },
     selectCountry(country) {
       this.selectedCountry = country
-      this.dropdownShown = false
+      this.shoDropdown = false
       this.searchFilter = this.selectedCountry.countryName
     }
   },
@@ -156,7 +157,7 @@ export default {
     >
     <!-- drop down selections -->
     <div class="dropdown-content">
-      <div class="dropdown-item" v-for="country in filteredCountries" :key="country.countryShortCode">
+      <div class="dropdown-item" v-for="country in filteredCountries" :key="country.countryShortCode" @mousedown="selectCountry(country)">
         {{ country.countryName }}
       </div>
     </div>

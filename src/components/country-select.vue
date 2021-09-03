@@ -34,6 +34,7 @@ export default {
   },
   data: () => ({
     ran: false,
+    searchFilter: ''
   }),
   computed: {
     countries() {
@@ -125,6 +126,13 @@ export default {
 </script>
 
 <template>
+<!-- input version -->
+  <div class="dropdown">
+    <input class="dropdown-input"
+      v-model="searchFilter"
+    >
+  </div>
+
   <select
     @change="onChange($event.target.value)"
     :class="className"

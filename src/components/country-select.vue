@@ -31,10 +31,16 @@ export default {
       type: Boolean,
       default: true,
     },
+    dropdownCap: {
+      type: Number,
+      default: 6,
+      note: 'Max number of countries in the dropdown',
+    }
   },
   data: () => ({
     ran: false,
-    searchFilter: ''
+    searchFilter: '',
+    optionsShown: false,
   }),
   computed: {
     countries() {
@@ -101,6 +107,19 @@ export default {
         showsFullCountryName ? "country-name" : "country";
       return this.autocomplete ? autocompleteType(this.countryName) : "off";
     },
+    filteredCountries() {
+      const filtered = []
+      const regOption = new RegExp(this.searchFilter, 'ig')
+      for (const country of this.countries) {
+        if(this.searchFilter.length < 1 || country.countryName.match(regOption)){
+          if(filtered.length < this.dropdownCap){
+            // console.log(country)
+            filtered.push(country)
+          }
+        }
+      }
+      return filtered
+    }
   },
   methods: {
     onChange(country) {
@@ -121,6 +140,11 @@ export default {
         ? regionObj.countryShortCode
         : regionObj.countryName;
     },
+    selectCountry(country) {
+      this.selectedCountry = country
+      this.dropdownShown = false
+      this.searchFilter = this.selectedCountry.countryName
+    }
   },
 };
 </script>
@@ -128,11 +152,14 @@ export default {
 <template>
 <!-- input version -->
   <div class="dropdown">
+    <!-- actual input field -->
     <input class="dropdown-input"
       v-model="searchFilter"
+      @keyup="keyMonitor"
     >
+    <!-- drop down selections -->
     <div class="dropdown-content">
-      <div class="dropdown-item" v-for="country in countries" :key="country.countryShortCode">
+      <div class="dropdown-item" v-for="country in filteredCountries" :key="country.countryShortCode">
         {{ country.countryName }}
       </div>
     </div>

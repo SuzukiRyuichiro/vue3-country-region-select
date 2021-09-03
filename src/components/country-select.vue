@@ -131,6 +131,11 @@ export default {
     <input class="dropdown-input"
       v-model="searchFilter"
     >
+    <div class="dropdown-content">
+      <div class="dropdown-item" v-for="country in countries" :key="country.countryShortCode">
+        {{ country.countryName }}
+      </div>
+    </div>
   </div>
 
   <select

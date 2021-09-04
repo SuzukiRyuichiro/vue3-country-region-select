@@ -35,7 +35,7 @@ export default {
       type: Number,
       default: 6,
       note: 'Max number of countries in the dropdown',
-    }
+    },
   },
   data: () => ({
     ran: false,
@@ -140,8 +140,19 @@ export default {
     },
     selectCountry(country) {
       this.selectedCountry = country
-      this.shoDropdown = false
+      this.optionsShown = false
       this.searchFilter = this.selectedCountry.countryName
+      this.$emit('selected', this.selectedCountry);
+    },
+    exit(){
+      // if there is no country selected or no letter in the input
+      if(!this.selectedCountry.countryName || this.searchFilter.length === 0){
+        this.selectedCountry = {}
+        this.searchFilter = ''
+      // else, set the search filtered to previously selected one
+      } else {
+        this.searchFilter = this.selectedCountry.countryName
+      }
     }
   },
 };
@@ -154,9 +165,12 @@ export default {
     <input class="dropdown-input"
       v-model="searchFilter"
       @keyup="keyMonitor"
+      @blur="exit()"
+      @focus="showOptions()"
+      :placeholder="placeholder"
     >
     <!-- drop down selections -->
-    <div class="dropdown-content">
+    <div class="dropdown-content" v-show="showOption">
       <div class="dropdown-item" v-for="country in filteredCountries" :key="country.countryShortCode" @mousedown="selectCountry(country)">
         {{ country.countryName }}
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="background-color: grey; height: 100vh;">
     {{"country: " + country}}
     <country-select v-model="country" :country="country" topCountry="United Kingdom" :countryName="true" />
     {{"region: " + region}}

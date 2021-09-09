@@ -153,7 +153,15 @@ export default {
       } else {
         this.searchFilter = this.selectedCountry.countryName
       }
-    }
+      // hide the dropdown on blur
+      this.optionsShown = false;
+    },
+    showOptions(){
+      if (!this.disabled) {
+        this.searchFilter = '';
+        this.optionsShown = true;
+      }
+    },
   },
 };
 </script>
@@ -170,7 +178,7 @@ export default {
       :placeholder="placeholder"
     >
     <!-- drop down selections -->
-    <div class="dropdown-content" v-show="showOption">
+    <div class="dropdown-content" v-show="optionsShown">
       <div class="dropdown-item" v-for="country in filteredCountries" :key="country.countryShortCode" @mousedown="selectCountry(country)">
         {{ country.countryName }}
       </div>

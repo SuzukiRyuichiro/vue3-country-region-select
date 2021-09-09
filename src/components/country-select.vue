@@ -184,8 +184,11 @@ export default {
     >
     <!-- drop down selections -->
     <div class="dropdown-content" v-show="optionsShown">
-      <div class="dropdown-item" v-for="country in filteredCountries" :key="country.countryShortCode" @mousedown="selectCountry(country)">
-        {{ country.countryName }}
+      <div class="dropdown-item"
+        v-for="country in filteredCountries"
+        :key="country.countryShortCode"
+        @mousedown="selectCountry(country)">
+          {{ country.countryName }}
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <script>
-import regions from "@/data.js";
+import regions from "@/data.js"
 
 export default {
   name: "CountrySelect",
@@ -47,67 +47,68 @@ export default {
     countries() {
       let countryList = regions.filter((region) => {
         if (this.countryName) {
-          return region.countryName !== this.firstCountry;
+          return region.countryName !== this.firstCountry
         } else {
-          return region.countryShortCode !== this.firstCountry;
+          return region.countryShortCode !== this.firstCountry
         }
-      });
+      })
       if (this.whiteList) {
         countryList = countryList.filter((country) => {
-          return this.whiteList.includes(country.countryShortCode);
-        });
+          return this.whiteList.includes(country.countryShortCode)
+        })
       }
       if (this.blackList) {
         countryList = countryList.filter((country) => {
-          return !this.blackList.includes(country.countryShortCode);
-        });
+          return !this.blackList.includes(country.countryShortCode)
+        })
       }
       if (this.usei18n && this.$i18n) {
         countryList = countryList.map((country) => {
-          let localeCountry = Object.assign({}, country);
-          localeCountry.countryName = this.$t(country.countryName);
-          return localeCountry;
-        });
+          let localeCountry = Object.assign({}, country)
+          localeCountry.countryName = this.$t(country.countryName)
+          return localeCountry
+        })
         countryList.sort((country1, country2) => {
-          return country1.countryName > country2.countryName ? 1 : -1;
-        });
+          return country1.countryName > country2.countryName ? 1 : -1
+        })
       }
       if (this.removePlaceholder) {
-        let c = this.firstCountry || countryList[0][this.valueType];
-        this.onChange(c);
+        let c = this.firstCountry || countryList[0][this.valueType]
+        this.onChange(c)
       }
-      return countryList;
+      return countryList
     },
     firstCountry() {
       if (this.countryName) {
         if (this.topCountry.length === 2) {
           const regionObj = regions.find((region) => {
-            return region.countryShortCode === this.topCountry;
-          });
-          return regionObj.countryName;
+            return region.countryShortCode === this.topCountry
+          })
+          return regionObj.countryName
         } else {
-          return this.topCountry;
+          return this.topCountry
         }
       }
       if (this.topCountry) {
-        return this.topCountry;
+        return this.topCountry
       }
-      return "";
+      return ""
     },
     name() {
-      return this.name;
+      return this.name
     },
     value() {
-      return this.country;
+      return this.country
     },
     valueType() {
-      return this.countryName ? "countryName" : "countryShortCode";
+      return this.countryName ? "countryName" : "countryShortCode"
     },
     autocompleteAttr() {
       const autocompleteType = (showsFullCountryName) =>
-        showsFullCountryName ? "country-name" : "country";
-      return this.autocomplete ? autocompleteType(this.countryName) : "off";
+        showsFullCountryName ? "country-name" : "country"
+      return this.autocomplete ? autocompleteType(this.countryName) : "off"
     },
+    // countries that matches the user input
     filteredCountries() {
       const filtered = []
       const regOption = new RegExp(`^${this.searchFilter}`, 'ig')
@@ -121,31 +122,31 @@ export default {
   },
   methods: {
     onChange(country) {
-      this.$emit("update:modelValue", country);
+      this.$emit("update:modelValue", country)
     },
     topCountryName() {
       const regionObj = regions.find((region) => {
         if (this.countryName) {
-          return region.countryName === this.firstCountry;
+          return region.countryName === this.firstCountry
         } else {
-          return region.countryShortCode === this.firstCountry;
+          return region.countryShortCode === this.firstCountry
         }
-      });
+      })
       if (this.usei18n && this.$i18n) {
-        return this.$t(regionObj.countryName);
+        return this.$t(regionObj.countryName)
       }
       return this.shortCodeDropdown
         ? regionObj.countryShortCode
-        : regionObj.countryName;
+        : regionObj.countryName
     },
     selectCountry(country) {
       this.selectedCountry = country
       this.optionsShown = false
       this.searchFilter = this.selectedCountry.countryName
-      this.$emit('selected', this.selectedCountry);
+      this.$emit('selected', this.selectedCountry)
     },
     exit(){
-      // if there is no country selected or no letter in the input
+      // if there is no country selected or no letter in the input, clear the input and selection
       if(!this.selectedCountry.countryName || this.searchFilter.length === 0){
         this.selectedCountry = {}
         this.searchFilter = ''
@@ -154,16 +155,20 @@ export default {
         this.searchFilter = this.selectedCountry.countryName
       }
       // hide the dropdown on blur
-      this.optionsShown = false;
+      this.optionsShown = false
     },
     showOptions(){
-      if (!this.disabled) {
-        this.searchFilter = '';
-        this.optionsShown = true;
-      }
+      // empty the input field and show dropdown
+      this.searchFilter = ''
+      this.optionsShown = true
     },
+    // Selecting when pressing Enter
+    keyMonitor(event) {
+      if (event.key === "Enter" && this.filteredCountries[0])
+        this.selectCountry(this.filteredCountries[0])
+    }
   },
-};
+}
 </script>
 
 <template>
@@ -172,9 +177,9 @@ export default {
     <!-- actual input field -->
     <input class="dropdown-input"
       v-model="searchFilter"
-      @keyup="keyMonitor"
       @blur="exit()"
       @focus="showOptions()"
+      @keyup="keyMonitor"
       :placeholder="placeholder"
     >
     <!-- drop down selections -->
